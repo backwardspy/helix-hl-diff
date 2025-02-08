@@ -7,7 +7,7 @@ from stransi import Ansi, SetAttribute, SetColor
 from stransi.attribute import Attribute
 from stransi.color import ColorRole
 
-ROWS = 20
+ROWS = 24
 COLS = 80
 FONT_SIZE = 12
 X_RATIO = 0.7
@@ -17,7 +17,7 @@ CHR_HEIGHT = int(FONT_SIZE * Y_RATIO)
 
 
 def render(ansi_path: Path, output_image_path: Path):
-    text = ansi_path.read_text()
+    text = ansi_path.read_text(encoding="utf-8")
 
     # remove unsupported control sequences
     pat = re.compile(r"(\x1b\[\?\d+h)|(\x1b\[\?\d+l)")
@@ -27,11 +27,11 @@ def render(ansi_path: Path, output_image_path: Path):
 
     fonts = {
         "regular": ImageFont.truetype(
-            "resources/JetBrainsMono-Regular.ttf",
+            "resources/fonts/JetBrainsMono-Regular.ttf",
             size=FONT_SIZE,
         ),
         "italic": ImageFont.truetype(
-            "resources/JetBrainsMono-Italic.ttf",
+            "resources/fonts/JetBrainsMono-Italic.ttf",
             size=FONT_SIZE,
         ),
     }
@@ -87,6 +87,7 @@ def render(ansi_path: Path, output_image_path: Path):
                 col = 0
                 row += 1
 
+    output_image_path.parent.mkdir(parents=True, exist_ok=True)
     img.save(output_image_path)
 
 

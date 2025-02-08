@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "pillow>=11.1.0",
+    "ptyprocess>=0.7.0",
     "stransi>=0.3.0",
 ]
 
