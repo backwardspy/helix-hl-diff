@@ -4,12 +4,8 @@ version = "0.1.0"
 description = ""
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "pillow>=11.1.0",
-    "ptyprocess>=0.7.0",
-    "stransi>=0.3.0",
-]
+dependencies = ["pillow>=11.1.0", "stransi>=0.3.0"]
 
 [tool.ruff]
 select = ["ALL"]
-ignore = ["D"]
+ignore = ["D", "S", "ERA"]
