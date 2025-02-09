@@ -18,6 +18,8 @@ HELIX_TARGET = os.getenv("HELIX_TARGET", "x86_64-windows")
 
 BASE_BRANCH = os.getenv("BASE_BRANCH", "main")
 
+REPO_NAME = os.getenv("REPO_NAME", "catppuccin/helix")
+
 try:
     CMP_BRANCH = os.environ["CMP_BRANCH"]
 except KeyError:
@@ -73,7 +75,7 @@ def main() -> None:
                     images=Path("output") / branch_pathsafe / "images" / flavour,
                 )
 
-                url = f"https://raw.githubusercontent.com/catppuccin/helix/refs/heads/{branch}/themes/default/catppuccin_{flavour}.toml"
+                url = f"https://raw.githubusercontent.com/{REPO_NAME}/refs/heads/{branch}/themes/default/catppuccin_{flavour}.toml"
                 theme_file = paths.runtime / "themes/catppuccin.toml"
                 theme_file.parent.mkdir(parents=True, exist_ok=True)
                 logger.info("downloading theme from %s into %s", url, theme_file)
@@ -97,7 +99,7 @@ def main() -> None:
 
 def render_samples(paths: Paths) -> None:
     # sorry
-    subprocess.run("mode con:cols=80 lines=24", shell=True, check=True)
+    # subprocess.run("mode con:cols=80 lines=24", shell=True, check=True)
     for sample in Path("samples").iterdir():
         render_sample(sample, paths)
 
