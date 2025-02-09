@@ -18,10 +18,14 @@ from helix_hl_diff.render import render
 HELIX_VERSION = os.getenv("HELIX_VERSION", "25.01.1")
 HELIX_TARGET = os.getenv("HELIX_TARGET", "x86_64-windows")
 
+BASE_REPO = os.getenv("BASE_REPO", "catppuccin/helix")
 BASE_BRANCH = os.getenv("BASE_BRANCH", "main")
 
-REPO_NAME = os.getenv("REPO_NAME", "catppuccin/helix")
-
+try:
+    CMP_REPO = os.environ["CMP_REPO"]
+except KeyError:
+    print("error: CMP_REPO must be set", file=sys.stderr)
+    sys.exit(1)
 try:
     CMP_BRANCH = os.environ["CMP_BRANCH"]
 except KeyError:
@@ -69,9 +73,9 @@ def main() -> None:
             / ("hx.exe" if "windows" in HELIX_TARGET else "hx")
         )
 
-        for branch, branch_pathsafe in [
-            (BASE_BRANCH, BASE_BRANCH_PATHSAFE),
-            (CMP_BRANCH, CMP_BRANCH_PATHSAFE),
+        for repo, branch, branch_pathsafe in [
+            (BASE_REPO, BASE_BRANCH, BASE_BRANCH_PATHSAFE),
+            (CMP_REPO, CMP_BRANCH, CMP_BRANCH_PATHSAFE),
         ]:
             for flavour in FLAVOURS:
                 paths = Paths(
@@ -81,7 +85,7 @@ def main() -> None:
                     images=Path("output") / flavour / branch_pathsafe / "images",
                 )
 
-                url = f"https://raw.githubusercontent.com/{REPO_NAME}/refs/heads/{branch}/themes/default/catppuccin_{flavour}.toml"
+                url = f"https://raw.githubusercontent.com/{repo}/refs/heads/{branch}/themes/default/catppuccin_{flavour}.toml"
                 theme_file = paths.runtime / "themes/catppuccin.toml"
                 theme_file.parent.mkdir(parents=True, exist_ok=True)
                 logger.info("downloading theme from %s into %s", url, theme_file)
