@@ -31,6 +31,10 @@ CMP_BRANCH_PATHSAFE = "-".join(Path(CMP_BRANCH).parts)
 
 FLAVOURS = ["latte", "frappe", "macchiato", "mocha"]
 
+BASE_PATH = Path(__file__).parent
+SAMPLES_PATH = BASE_PATH / "samples"
+RESOURCES_PATH = BASE_PATH / "resources"
+
 logging.basicConfig(
     format="[%(levelname)8s] %(message)s",
     level=logging.getLevelNamesMapping()[os.getenv("LOG_LEVEL", "info").upper()],
@@ -100,7 +104,7 @@ def main() -> None:
 def render_samples(paths: Paths) -> None:
     # sorry
     # subprocess.run("mode con:cols=80 lines=24", shell=True, check=True)
-    for sample in Path("samples").iterdir():
+    for sample in SAMPLES_PATH.iterdir():
         render_sample(sample, paths)
 
 
@@ -112,7 +116,7 @@ def render_sample(sample: Path, paths: Paths) -> None:
         args = [
             str(paths.hx.absolute()),
             "--config",
-            str(Path("resources/helix-config.toml").absolute()),
+            str((RESOURCES_PATH / "helix-config.toml").absolute()),
             str(sample.absolute()),
         ]
 
@@ -135,7 +139,7 @@ def render_sample(sample: Path, paths: Paths) -> None:
 
     image_path = paths.images / f"{sample.stem}.png"
     logger.info("rendering %s into %s", out_path, image_path)
-    render(out_path, image_path)
+    render(out_path, image_path, resources_path=RESOURCES_PATH)
 
 
 if __name__ == "__main__":

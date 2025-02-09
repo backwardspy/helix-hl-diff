@@ -16,7 +16,7 @@ CHR_WIDTH = int(FONT_SIZE * X_RATIO)
 CHR_HEIGHT = int(FONT_SIZE * Y_RATIO)
 
 
-def render(ansi_path: Path, output_image_path: Path):
+def render(ansi_path: Path, output_image_path: Path, *, resources_path: Path):
     text = ansi_path.read_text(encoding="utf-8")
 
     # remove unsupported control sequences
@@ -27,11 +27,11 @@ def render(ansi_path: Path, output_image_path: Path):
 
     fonts = {
         "regular": ImageFont.truetype(
-            "resources/fonts/JetBrainsMono-Regular.ttf",
+            resources_path / "fonts/JetBrainsMono-Regular.ttf",
             size=FONT_SIZE,
         ),
         "italic": ImageFont.truetype(
-            "resources/fonts/JetBrainsMono-Italic.ttf",
+            resources_path / "fonts/JetBrainsMono-Italic.ttf",
             size=FONT_SIZE,
         ),
     }
