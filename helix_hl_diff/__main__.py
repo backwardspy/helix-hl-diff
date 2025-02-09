@@ -23,13 +23,13 @@ REPO_NAME = os.getenv("REPO_NAME", "catppuccin/helix")
 try:
     CMP_BRANCH = os.environ["CMP_BRANCH"]
 except KeyError:
-    print("error: CMP_BRANCH must be set")
+    print("error: CMP_BRANCH must be set", file=sys.stderr)
     sys.exit(1)
 
 BASE_BRANCH_PATHSAFE = "-".join(Path(BASE_BRANCH).parts)
 CMP_BRANCH_PATHSAFE = "-".join(Path(CMP_BRANCH).parts)
 
-FLAVOURS = ["latte", "frappe", "macchiato", "mocha"]
+FLAVOURS = ["latte", "mocha"]
 
 BASE_PATH = Path(__file__).parent
 SAMPLES_PATH = BASE_PATH / "samples"
@@ -75,8 +75,8 @@ def main() -> None:
                 paths = Paths(
                     hx,
                     runtime,
-                    ansi=Path("output") / branch_pathsafe / "ansi" / flavour,
-                    images=Path("output") / branch_pathsafe / "images" / flavour,
+                    ansi=Path("output") / flavour / branch_pathsafe / "ansi",
+                    images=Path("output") / flavour / branch_pathsafe / "images",
                 )
 
                 url = f"https://raw.githubusercontent.com/{REPO_NAME}/refs/heads/{branch}/themes/default/catppuccin_{flavour}.toml"
@@ -89,14 +89,14 @@ def main() -> None:
                 render_samples(paths)
 
         for flavour in FLAVOURS:
-            base_imgs = Path("output") / BASE_BRANCH_PATHSAFE / "images" / flavour
+            base_imgs = Path("output") / flavour / BASE_BRANCH_PATHSAFE / "images"
             for img in base_imgs.iterdir():
                 cmp_img = (
-                    Path("output") / CMP_BRANCH_PATHSAFE / "images" / flavour / img.name
+                    Path("output") / flavour / CMP_BRANCH_PATHSAFE / "images" / img.name
                 )
                 _, diff_img = diff_images(img, cmp_img)
                 if diff_img:
-                    diffs_path = Path("output") / "diffs" / img.name
+                    diffs_path = Path("output") / flavour / "diffs" / img.name
                     diffs_path.parent.mkdir(parents=True, exist_ok=True)
                     diff_img.save(diffs_path)
 
