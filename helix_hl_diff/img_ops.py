@@ -17,3 +17,14 @@ def diff_images(
     if diff.getbbox():
         return (True, diff)
     return (False, None)
+
+
+def stack_images(*images: Image.Image) -> Image.Image:
+    height = max(img.height for img in images)
+    width = sum(img.width for img in images)
+    stacked_img = Image.new("RGB", (width, height))
+    offset = 0
+    for img in images:
+        stacked_img.paste(img, (offset, 0))
+        offset += img.width
+    return stacked_img

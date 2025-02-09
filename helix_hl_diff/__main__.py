@@ -9,8 +9,10 @@ from tempfile import TemporaryDirectory
 from time import sleep
 from urllib.request import urlopen
 
+from PIL import Image
+
 from helix_hl_diff import helix
-from helix_hl_diff.img_compare import diff_images
+from helix_hl_diff.img_ops import diff_images, stack_images
 from helix_hl_diff.render import render
 
 HELIX_VERSION = os.getenv("HELIX_VERSION", "25.01.1")
@@ -98,7 +100,12 @@ def main() -> None:
                 if diff_img:
                     diffs_path = Path("output") / flavour / "diffs" / img.name
                     diffs_path.parent.mkdir(parents=True, exist_ok=True)
-                    diff_img.save(diffs_path)
+                    stacked_img = stack_images(
+                        Image.open(img),
+                        Image.open(cmp_img),
+                        diff_img,
+                    )
+                    stacked_img.save(diffs_path)
 
 
 def render_samples(paths: Paths) -> None:
