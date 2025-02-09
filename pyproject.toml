@@ -6,6 +6,13 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["pillow>=11.1.0", "stransi>=0.3.0"]
 
+[project.scripts]
+helix-hl-diff = "helix_hl_diff.__main__:main"
+
 [tool.ruff]
 select = ["ALL"]
-ignore = ["D", "S", "ERA"]
+ignore = ["D", "S", "T", "ERA"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

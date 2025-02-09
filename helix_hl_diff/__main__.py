@@ -2,6 +2,7 @@ import logging
 import os
 import signal
 import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -16,7 +17,12 @@ HELIX_VERSION = os.getenv("HELIX_VERSION", "25.01.1")
 HELIX_TARGET = os.getenv("HELIX_TARGET", "x86_64-windows")
 
 BASE_BRANCH = os.getenv("BASE_BRANCH", "main")
-CMP_BRANCH = os.getenv("CMP_BRANCH", "renovate/catppuccin-whiskers-2.x")
+
+try:
+    CMP_BRANCH = os.environ["CMP_BRANCH"]
+except KeyError:
+    print("error: CMP_BRANCH must be set")
+    sys.exit(1)
 
 BASE_BRANCH_PATHSAFE = "-".join(Path(BASE_BRANCH).parts)
 CMP_BRANCH_PATHSAFE = "-".join(Path(CMP_BRANCH).parts)
